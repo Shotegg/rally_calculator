@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const rallyContainer = document.getElementById("rallyContainer");
   const rallyList = document.getElementById("rallyList");
   const addRallyBtn = document.getElementById("addRally");
-  const calculateBtn = document.getElementById("calculate");
 
   addRallyBtn.onclick = () => {
     rallyCount++;
@@ -16,11 +15,13 @@ document.addEventListener("DOMContentLoaded", () => {
   function createRallyCreator(number) {
     const rally = document.createElement("div");
     rally.className = "rally";
+    rally.dataset.id = number;
 
     rally.innerHTML = `
-      <h3>
+      <div class="rally-header">
         <input type="text" value="Rally Creator ${number}">
-      </h3>
+        <button class="delete">✖</button>
+      </div>
 
       <div class="t-grid">
         ${createTBox("T1")}
@@ -32,6 +33,11 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
 
     rallyContainer.appendChild(rally);
+
+    rally.querySelector(".delete").onclick = () => {
+      rally.remove();
+      updateRallyList();
+    };
 
     rally.querySelector("input").addEventListener("input", updateRallyList);
   }
@@ -50,16 +56,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function updateRallyList() {
     rallyList.innerHTML = "";
-    document.querySelectorAll(".rally").forEach(rally => {
+
+    document.querySelectorAll(".rally").forEach((rally, index) => {
       const name = rally.querySelector("input").value;
-      const li = document.createElement("li");
-      li.textContent = name;
-      rallyList.appendChild(li);
+
+      const row = document.createElement("div");
+      row.className = "target-row";
+
+      row.innerHTML = `
+        <span>${name}</span>
+        <select>
+          <option>No target</option>
+          <option>T1</option>
+          <option>T2</option>
+          <option>T3</option>
+          <option>T4</option>
+          <option>Castle</option>
+        </select>
+      `;
+
+      rallyList.appendChild(row);
     });
   }
 
-  calculateBtn.onclick = () => {
-    alert("Calculate logic coming next 😉");
+  document.getElementById("calculate").onclick = () => {
+    alert("Next step: calculation logic 😎");
   };
 
 });
