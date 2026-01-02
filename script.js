@@ -1,69 +1,65 @@
-body {
-  font-family: Arial, sans-serif;
-  background: #f4f4f4;
-  padding: 20px;
-}
+document.addEventListener("DOMContentLoaded", () => {
 
-h1 {
-  margin-bottom: 20px;
-}
+  let rallyCount = 0;
 
-.layout {
-  display: flex;
-  gap: 20px;
-}
+  const rallyContainer = document.getElementById("rallyContainer");
+  const rallyList = document.getElementById("rallyList");
+  const addRallyBtn = document.getElementById("addRally");
+  const calculateBtn = document.getElementById("calculate");
 
-.left {
-  flex: 3;
-}
+  addRallyBtn.onclick = () => {
+    rallyCount++;
+    createRallyCreator(rallyCount);
+    updateRallyList();
+  };
 
-.right {
-  flex: 1;
-  background: white;
-  padding: 15px;
-  border-radius: 6px;
-}
+  function createRallyCreator(number) {
+    const rally = document.createElement("div");
+    rally.className = "rally";
 
-button {
-  padding: 8px 12px;
-  cursor: pointer;
-  margin-bottom: 15px;
-}
+    rally.innerHTML = `
+      <h3>
+        <input type="text" value="Rally Creator ${number}">
+      </h3>
 
-.rally {
-  background: white;
-  padding: 15px;
-  margin-bottom: 20px;
-  border-radius: 6px;
-}
+      <div class="t-grid">
+        ${createTBox("T1")}
+        ${createTBox("T2")}
+        ${createTBox("T3")}
+        ${createTBox("T4")}
+        ${createTBox("Castle")}
+      </div>
+    `;
 
-.rally h3 input {
-  font-size: 16px;
-  width: 100%;
-}
+    rallyContainer.appendChild(rally);
 
-.t-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 10px;
-  margin-top: 10px;
-}
+    rally.querySelector("input").addEventListener("input", updateRallyList);
+  }
 
-.t-box {
-  background: #eee;
-  padding: 10px;
-  border-radius: 4px;
-}
+  function createTBox(name) {
+    return `
+      <div class="t-box">
+        <strong>${name}</strong>
+        <label>Minutes</label>
+        <input type="number" min="0" value="0">
+        <label>Seconds</label>
+        <input type="number" min="0" value="0">
+      </div>
+    `;
+  }
 
-.t-box label {
-  display: block;
-  font-size: 12px;
-}
+  function updateRallyList() {
+    rallyList.innerHTML = "";
+    document.querySelectorAll(".rally").forEach(rally => {
+      const name = rally.querySelector("input").value;
+      const li = document.createElement("li");
+      li.textContent = name;
+      rallyList.appendChild(li);
+    });
+  }
 
-.t-box input {
-  width: 100%;
-}
+  calculateBtn.onclick = () => {
+    alert("Calculate logic coming next 😉");
+  };
 
-ul {
-  padding-left: 20px;
-}
+});
