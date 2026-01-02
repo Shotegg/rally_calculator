@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Rally Helper</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <h1>Rally Helper – Prototype</h1>
+
+  <button id="add">➕ Add T</button>
+
+  <div id="container">
+    <div class="t-block">
+      <h3>T</h3>
+
+      <label>
+        Minutes
+        <input type="number" class="minutes" min="0" value="0">
+      </label>
+
+      <label>
+        Seconds
+        <input type="number" class="seconds" min="0" value="0">
+      </label>
+
+      <div class="result">
+        Total seconds: <span class="total">0</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
