@@ -7,30 +7,37 @@
 </head>
 <body>
 
-  <h1>Rally Helper – Prototype</h1>
+<h1>Rally Helper</h1>
 
-  <button id="add">➕ Add T</button>
+<div class="layout">
 
-  <div id="container">
-    <div class="t-block">
-      <h3>T</h3>
-
-      <label>
-        Minutes
-        <input type="number" class="minutes" min="0" value="0">
-      </label>
-
-      <label>
-        Seconds
-        <input type="number" class="seconds" min="0" value="0">
-      </label>
-
-      <div class="result">
-        Total seconds: <span class="total">0</span>
-      </div>
-    </div>
+  <!-- LEFT -->
+  <div class="left">
+    <button id="addRally">➕ Add Rally Creator</button>
+    <div id="rallyContainer"></div>
   </div>
 
-  <script src="script.js"></script>
+  <!-- RIGHT -->
+  <div class="right">
+    <h3>Choose target</h3>
+
+    <select id="targetSelect">
+      <option>No target</option>
+      <option>T1</option>
+      <option>T2</option>
+      <option>T3</option>
+      <option>T4</option>
+      <option>Castle</option>
+    </select>
+
+    <h3>Rally Creators</h3>
+    <ul id="rallyList"></ul>
+
+    <button id="calculate">Calculate</button>
+  </div>
+
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
