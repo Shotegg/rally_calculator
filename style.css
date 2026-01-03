@@ -20,27 +20,43 @@ body {
   border-radius: 6px;
 }
 
+.top-controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
 button {
   padding: 6px 10px;
   cursor: pointer;
 }
 
+#search {
+  flex: 1;
+  padding: 6px;
+}
+
 .rally {
   background: white;
-  padding: 15px;
-  margin-bottom: 20px;
   border-radius: 6px;
+  margin-bottom: 10px;
+  overflow: hidden;
 }
 
 .rally-header {
   display: flex;
   gap: 10px;
   align-items: center;
+  padding: 10px;
+  cursor: grab;
+  background: #ddd;
 }
 
 .rally-header input {
   flex: 1;
   font-size: 16px;
+  border: none;
+  background: transparent;
 }
 
 .delete {
@@ -51,11 +67,19 @@ button {
   cursor: pointer;
 }
 
+.rally-content {
+  display: none;
+  padding: 15px;
+}
+
+.rally.open .rally-content {
+  display: block;
+}
+
 .t-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 10px;
-  margin-top: 10px;
 }
 
 .t-box {
@@ -74,6 +98,5 @@ pre {
   background: #111;
   color: #0f0;
   padding: 10px;
-  font-size: 13px;
   user-select: all;
 }
