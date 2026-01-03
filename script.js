@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("addRally").onclick = () => {
     rallyCount++;
     createRallyCreator(rallyCount);
-    openLast();
+    openFirst();
     updateRallyList();
   };
 
@@ -21,10 +21,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     rally.innerHTML = `
       <div class="rally-header">
+        <span class="drag-handle">≡</span>
         <input type="text" value="Rally Creator ${number}">
         <button class="delete">✖</button>
       </div>
-
+    
       <div class="rally-content">
         <div class="t-grid">
           ${createTBox("T1")}
@@ -36,8 +37,8 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
     `;
 
-    rallyContainer.appendChild(rally);
-
+  rallyContainer.prepend(rally);
+    
     rally.querySelector(".delete").onclick = () => {
       rally.remove();
       updateRallyList();
@@ -70,9 +71,9 @@ document.addEventListener("DOMContentLoaded", () => {
     rally.classList.add("open");
   }
 
-  function openLast() {
-    const all = document.querySelectorAll(".rally");
-    if (all.length) openOnly(all[all.length - 1]);
+  function openFirst() {
+    const first = document.querySelector(".rally");
+    if (first) openOnly(first);
   }
 
   /* ---------- SEARCH ---------- */
@@ -92,20 +93,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* ---------- DRAG & DROP ---------- */
   function enableDrag(rally) {
+    const handle = rally.querySelector(".drag-handle");
+  
+    handle.addEventListener("mousedown", () => {
+      rally.draggable = true;
+    });
+  
+    handle.addEventListener("mouseup", () => {
+      rally.draggable = false;
+    });
+  
     rally.addEventListener("dragstart", () => rally.classList.add("dragging"));
     rally.addEventListener("dragend", () => {
       rally.classList.remove("dragging");
+      rally.draggable = false;
       updateRallyList();
     });
   }
-
-  rallyContainer.addEventListener("dragover", e => {
-    e.preventDefault();
-    const dragging = document.querySelector(".dragging");
-    const after = [...rallyContainer.querySelectorAll(".rally:not(.dragging)")]
-      .find(r => e.clientY < r.offsetTop + r.offsetHeight / 2);
-    rallyContainer.insertBefore(dragging, after);
-  });
 
   /* ---------- TARGET LIST ---------- */
   function updateRallyList() {
