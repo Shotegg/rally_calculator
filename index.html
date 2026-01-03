@@ -9,19 +9,30 @@
 
 <h1>Rally Helper</h1>
 
-<button id="addRally">Add Rally Creator</button>
+<div class="layout">
 
-<div class="main">
-  <div id="rallyContainer"></div>
+  <!-- LEFT -->
+  <div class="left">
 
-  <div class="sidebar">
-    <h3>Choose Target</h3>
-    <ul id="rallyList"></ul>
+    <div class="top-controls">
+      <button id="addRally">➕ Add Rally Creator</button>
+      <input id="search" placeholder="Search Rally Creator...">
+    </div>
+
+    <div id="rallyContainer"></div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="right">
+    <h3>Rally Creators & Targets</h3>
+    <div id="rallyList"></div>
 
     <button id="calculate">Calculate</button>
 
-    <div id="results"></div>
+    <h3>Result (UTC)</h3>
+    <pre id="resultBox"></pre>
   </div>
+
 </div>
 
 <script src="script.js"></script>
