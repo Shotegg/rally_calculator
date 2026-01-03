@@ -52,6 +52,17 @@ button {
   background: #ddd;
 }
 
+.drag-handle {
+  font-size: 18px;
+  cursor: grab;
+  user-select: none;
+  opacity: 0.7;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
 .rally-header input {
   flex: 1;
   font-size: 16px;
