@@ -1,28 +1,50 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  let rallyCount = 0;
+  let activeType = "ally";
+  let counters = { ally: 0, enemy: 0 };
 
-  const rallyContainer = document.getElementById("rallyContainer");
+  const containers = {
+    ally: document.getElementById("allyContainer"),
+    enemy: document.getElementById("enemyContainer")
+  };
+
   const rallyList = document.getElementById("rallyList");
   const resultBox = document.getElementById("resultBox");
   const search = document.getElementById("search");
 
+  /* ---------- TABS ---------- */
+  document.querySelectorAll(".tab").forEach(tab => {
+    tab.onclick = () => {
+      activeType = tab.dataset.type;
+
+      document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+      tab.classList.add("active");
+
+      containers.ally.classList.toggle("hidden", activeType !== "ally");
+      containers.enemy.classList.toggle("hidden", activeType !== "enemy");
+
+      updateRallyList();
+    };
+  });
+
+  /* ---------- ADD ---------- */
   document.getElementById("addRally").onclick = () => {
-    rallyCount++;
-    createRallyCreator(rallyCount);
-    openFirst();
+    counters[activeType]++;
+    createRallyCreator(activeType, counters[activeType]);
+    openFirst(activeType);
     updateRallyList();
   };
 
-  function createRallyCreator(number) {
+  function createRallyCreator(type, number) {
     const rally = document.createElement("div");
     rally.className = "rally";
     rally.draggable = true;
+    rally.dataset.type = type;
 
     rally.innerHTML = `
       <div class="rally-header">
         <span class="drag-handle">≡</span>
-        <input type="text" value="Rally Creator ${number}">
+        <input type="text" value="${type === "ally" ? "Ally" : "Enemy"} Rally ${number}">
         <button class="delete">✖</button>
       </div>
 
@@ -37,100 +59,101 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
     `;
 
-    // 🔴 ΕΔΩ Η ΑΛΛΑΓΗ: prepend αντί για append
-    rallyContainer.prepend(rally);
+    containers[type].prepend(rally);
 
     rally.querySelector(".delete").onclick = () => {
       rally.remove();
       updateRallyList();
     };
 
-    rally.querySelector(".rally-header").onclick = (e) => {
+    rally.querySelector(".rally-header").onclick = e => {
       if (e.target.tagName === "BUTTON") return;
-      openOnly(rally);
+      openOnly(rally, type);
     };
 
     rally.querySelector("input").addEventListener("input", updateRallyList);
 
-    enableDrag(rally);
+    enableDrag(rally, containers[type]);
   }
 
   function createTBox(name) {
     return `
       <div class="t-box" data-name="${name}">
         <strong>${name}</strong>
-        <label>Minutes</label>
         <input type="number" class="min" min="0" value="0">
-        <label>Seconds</label>
         <input type="number" class="sec" min="0" value="0">
       </div>
     `;
   }
 
-  function openOnly(rally) {
-    document.querySelectorAll(".rally").forEach(r => r.classList.remove("open"));
-    rally.classList.add("open");
+  function openOnly(target, type) {
+    containers[type].querySelectorAll(".rally").forEach(r => r.classList.remove("open"));
+    target.classList.add("open");
   }
 
-  // 🔴 ΝΕΑ ΛΟΓΙΚΗ: άνοιγμα ΠΡΩΤΟΥ (κορυφή)
-  function openFirst() {
-    const first = document.querySelector(".rally");
-    if (first) openOnly(first);
+  function openFirst(type) {
+    const first = containers[type].querySelector(".rally");
+    if (first) openOnly(first, type);
   }
 
-  /* ---------- SEARCH ---------- */
-  search.addEventListener("input", () => {
-    const val = search.value.toLowerCase();
-    if (!val) return;
-
-    const rally = Array.from(document.querySelectorAll(".rally"))
-      .find(r => r.querySelector("input").value.toLowerCase().includes(val));
-
-    if (rally) {
-      rallyContainer.prepend(rally);
-      openOnly(rally);
-      updateRallyList();
-    }
-  });
-
-  /* ---------- DRAG & DROP ---------- */
-  function enableDrag(rally) {
+  /* ---------- DRAG ---------- */
+  function enableDrag(rally, container) {
     rally.addEventListener("dragstart", () => rally.classList.add("dragging"));
     rally.addEventListener("dragend", () => {
       rally.classList.remove("dragging");
       updateRallyList();
     });
+
+    container.addEventListener("dragover", e => {
+      e.preventDefault();
+      const dragging = container.querySelector(".dragging");
+      if (!dragging) return;
+
+      const after = [...container.querySelectorAll(".rally:not(.dragging)")]
+        .find(r => e.clientY < r.offsetTop + r.offsetHeight / 2);
+
+      container.insertBefore(dragging, after);
+    });
   }
 
-  rallyContainer.addEventListener("dragover", e => {
-    e.preventDefault();
-    const dragging = document.querySelector(".dragging");
-    const after = [...rallyContainer.querySelectorAll(".rally:not(.dragging)")]
-      .find(r => e.clientY < r.offsetTop + r.offsetHeight / 2);
-    rallyContainer.insertBefore(dragging, after);
+  /* ---------- SEARCH (active tab only) ---------- */
+  search.addEventListener("input", () => {
+    const val = search.value.toLowerCase();
+    if (!val) return;
+
+    const rally = [...containers[activeType].querySelectorAll(".rally")]
+      .find(r => r.querySelector("input").value.toLowerCase().includes(val));
+
+    if (rally) {
+      containers[activeType].prepend(rally);
+      openOnly(rally, activeType);
+      updateRallyList();
+    }
   });
 
   /* ---------- TARGET LIST ---------- */
   function updateRallyList() {
     rallyList.innerHTML = "";
 
-    document.querySelectorAll(".rally").forEach(rally => {
-      const name = rally.querySelector(".rally-header input").value;
+    ["ally", "enemy"].forEach(type => {
+      containers[type].querySelectorAll(".rally").forEach(rally => {
+        const name = rally.querySelector("input").value;
 
-      const row = document.createElement("div");
-      row.className = "target-row";
-      row.innerHTML = `
-        <span>${name}</span>
-        <select>
-          <option>No target</option>
-          <option>T1</option>
-          <option>T2</option>
-          <option>T3</option>
-          <option>T4</option>
-          <option>Castle</option>
-        </select>
-      `;
-      rallyList.appendChild(row);
+        const row = document.createElement("div");
+        row.className = "target-row";
+        row.innerHTML = `
+          <span>${name}</span>
+          <select>
+            <option>No target</option>
+            <option>T1</option>
+            <option>T2</option>
+            <option>T3</option>
+            <option>T4</option>
+            <option>Castle</option>
+          </select>
+        `;
+        rallyList.appendChild(row);
+      });
     });
   }
 
@@ -146,8 +169,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if (target === "No target") return;
 
       const box = rally.querySelector(`.t-box[data-name="${target}"]`);
-      const total = Number(box.querySelector(".min").value) * 60 +
-                    Number(box.querySelector(".sec").value);
+      const total =
+        Number(box.querySelector(".min").value) * 60 +
+        Number(box.querySelector(".sec").value);
 
       if (!groups[target]) groups[target] = [];
       groups[target].push({
@@ -169,7 +193,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function formatUTC(d) {
     return [d.getUTCHours(), d.getUTCMinutes(), d.getUTCSeconds()]
-      .map(v => String(v).padStart(2, "0")).join(":");
+      .map(v => String(v).padStart(2, "0"))
+      .join(":");
   }
 
 });
