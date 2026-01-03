@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     rally.innerHTML = `
       <div class="rally-header">
+        <span class="drag-handle">≡</span>
         <input type="text" value="Rally Creator ${number}">
         <button class="delete">✖</button>
       </div>
@@ -131,7 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* ---------- CALCULATE (ίδιο logic) ---------- */
+  /* ---------- CALCULATE ---------- */
   document.getElementById("calculate").onclick = () => {
     resultBox.textContent = "";
     const rallies = [...document.querySelectorAll(".rally")];
