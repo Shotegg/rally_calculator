@@ -59,6 +59,13 @@ button {
   background: transparent;
 }
 
+.drag-handle {
+  font-size: 18px;
+  cursor: grab;
+  user-select: none;
+  padding-right: 6px;
+}
+
 .delete {
   background: none;
   border: none;
