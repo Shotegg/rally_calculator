@@ -4,9 +4,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const rallyContainer = document.getElementById("rallyContainer");
   const rallyList = document.getElementById("rallyList");
-  const addRallyBtn = document.getElementById("addRally");
+  const resultBox = document.getElementById("resultBox");
 
-  addRallyBtn.onclick = () => {
+  document.getElementById("addRally").onclick = () => {
     rallyCount++;
     createRallyCreator(rallyCount);
     updateRallyList();
@@ -15,7 +15,6 @@ document.addEventListener("DOMContentLoaded", () => {
   function createRallyCreator(number) {
     const rally = document.createElement("div");
     rally.className = "rally";
-    rally.dataset.id = number;
 
     rally.innerHTML = `
       <div class="rally-header">
@@ -44,12 +43,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function createTBox(name) {
     return `
-      <div class="t-box">
+      <div class="t-box" data-name="${name}">
         <strong>${name}</strong>
         <label>Minutes</label>
-        <input type="number" min="0" value="0">
+        <input type="number" min="0" value="0" class="min">
         <label>Seconds</label>
-        <input type="number" min="0" value="0">
+        <input type="number" min="0" value="0" class="sec">
       </div>
     `;
   }
@@ -57,8 +56,8 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateRallyList() {
     rallyList.innerHTML = "";
 
-    document.querySelectorAll(".rally").forEach((rally, index) => {
-      const name = rally.querySelector("input").value;
+    document.querySelectorAll(".rally").forEach(rally => {
+      const name = rally.querySelector(".rally-header input").value;
 
       const row = document.createElement("div");
       row.className = "target-row";
@@ -79,8 +78,51 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  document.getElementById("calculate").onclick = () => {
-    alert("Next step: calculation logic 😎");
-  };
+  document.getElementById("calculate").onclick = calculate;
+
+  function calculate() {
+    resultBox.textContent = "";
+
+    const rallies = Array.from(document.querySelectorAll(".rally"));
+    const rows = Array.from(document.querySelectorAll(".target-row"));
+
+    const groups = {};
+
+    rallies.forEach((rally, i) => {
+      const target = rows[i].querySelector("select").value;
+      if (target === "No target") return;
+
+      const box = rally.querySelector(`.t-box[data-name="${target}"]`);
+      const min = Number(box.querySelector(".min").value);
+      const sec = Number(box.querySelector(".sec").value);
+      const total = min * 60 + sec;
+
+      if (!groups[target]) groups[target] = [];
+      groups[target].push({
+        name: rally.querySelector(".rally-header input").value,
+        total
+      });
+    });
+
+    const nowUTC = new Date();
+
+    Object.values(groups).forEach(group => {
+      const max = Math.max(...group.map(g => g.total));
+
+      group.forEach(g => {
+        const diff = max - g.total;
+        const time = new Date(nowUTC.getTime() + diff * 1000);
+        resultBox.textContent += `${g.name} → ${formatUTC(time)}\n`;
+      });
+    });
+  }
+
+  function formatUTC(date) {
+    return [
+      date.getUTCHours(),
+      date.getUTCMinutes(),
+      date.getUTCSeconds()
+    ].map(v => String(v).padStart(2, "0")).join(":");
+  }
 
 });
