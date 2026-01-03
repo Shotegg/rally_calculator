@@ -34,13 +34,13 @@ button {
 
 .rally-header {
   display: flex;
-  justify-content: space-between;
+  gap: 10px;
   align-items: center;
 }
 
 .rally-header input {
+  flex: 1;
   font-size: 16px;
-  width: 100%;
 }
 
 .delete {
@@ -66,12 +66,14 @@ button {
 
 .target-row {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
   gap: 10px;
+  margin-bottom: 8px;
 }
 
-.target-row select {
-  flex: 1;
+pre {
+  background: #111;
+  color: #0f0;
+  padding: 10px;
+  font-size: 13px;
+  user-select: all;
 }
