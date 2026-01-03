@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("addRally").onclick = () => {
     rallyCount++;
     createRallyCreator(rallyCount);
-    openLast();
+    openFirst();
     updateRallyList();
   };
 
@@ -37,7 +37,8 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
     `;
 
-    rallyContainer.appendChild(rally);
+    // 🔴 ΕΔΩ Η ΑΛΛΑΓΗ: prepend αντί για append
+    rallyContainer.prepend(rally);
 
     rally.querySelector(".delete").onclick = () => {
       rally.remove();
@@ -71,9 +72,10 @@ document.addEventListener("DOMContentLoaded", () => {
     rally.classList.add("open");
   }
 
-  function openLast() {
-    const all = document.querySelectorAll(".rally");
-    if (all.length) openOnly(all[all.length - 1]);
+  // 🔴 ΝΕΑ ΛΟΓΙΚΗ: άνοιγμα ΠΡΩΤΟΥ (κορυφή)
+  function openFirst() {
+    const first = document.querySelector(".rally");
+    if (first) openOnly(first);
   }
 
   /* ---------- SEARCH ---------- */
