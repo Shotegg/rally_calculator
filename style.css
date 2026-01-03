@@ -1,6 +1,8 @@
+/* ---------- BASE ---------- */
 body {
   font-family: Arial, sans-serif;
-  background: #f4f4f4;
+  background: #121212;
+  color: #e0e0e0;
   padding: 20px;
 }
 
@@ -9,17 +11,20 @@ body {
   gap: 20px;
 }
 
+/* ---------- PANELS ---------- */
 .left {
   flex: 3;
 }
 
 .right {
   flex: 1;
-  background: white;
+  background: #1e1e1e;
   padding: 15px;
-  border-radius: 6px;
+  border-radius: 8px;
+  border: 1px solid #2a2a2a;
 }
 
+/* ---------- TOP CONTROLS ---------- */
 .top-controls {
   display: flex;
   gap: 10px;
@@ -29,14 +34,26 @@ body {
 button {
   padding: 6px 10px;
   cursor: pointer;
+  background: #2a2a2a;
+  color: #e0e0e0;
+  border: 1px solid #3a3a3a;
+  border-radius: 4px;
+}
+
+button:hover {
+  background: #3a3a3a;
 }
 
 #search {
   flex: 1;
   padding: 6px;
+  background: #1e1e1e;
+  color: #e0e0e0;
+  border: 1px solid #3a3a3a;
+  border-radius: 4px;
 }
 
-/* TABS */
+/* ---------- TABS ---------- */
 .tabs {
   display: flex;
   gap: 10px;
@@ -45,13 +62,14 @@ button {
 
 .tab {
   padding: 6px 12px;
-  border: none;
-  background: #ccc;
+  border: 1px solid #3a3a3a;
+  background: #2a2a2a;
+  color: #ccc;
   border-radius: 4px;
 }
 
 .tab.active {
-  background: #666;
+  background: #4a4a4a;
   color: white;
 }
 
@@ -59,19 +77,21 @@ button {
   display: none;
 }
 
-/* RALLY */
+/* ---------- RALLY ---------- */
 .rally {
   border-radius: 6px;
   margin-bottom: 10px;
   overflow: hidden;
+  border: 1px solid #2a2a2a;
 }
 
+/* ally / enemy colors (κρατάμε λογική σου) */
 .ally .rally {
-  background: #e6f4ea;
+  background: #1f3a2a;
 }
 
 .enemy .rally {
-  background: #f8e6e6;
+  background: #3a1f1f;
 }
 
 .rally-header {
@@ -80,12 +100,12 @@ button {
   align-items: center;
   padding: 10px;
   cursor: grab;
-  background: rgba(0,0,0,0.1);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .drag-handle {
   cursor: grab;
-  opacity: 0.7;
+  opacity: 0.6;
 }
 
 .rally-header input {
@@ -93,14 +113,19 @@ button {
   font-size: 16px;
   border: none;
   background: transparent;
+  color: #e0e0e0;
 }
 
 .delete {
   background: none;
   border: none;
-  color: red;
+  color: #ff6b6b;
   font-size: 18px;
   cursor: pointer;
+}
+
+.delete:hover {
+  color: #ff9a9a;
 }
 
 .rally-content {
@@ -112,6 +137,7 @@ button {
   display: block;
 }
 
+/* ---------- TIME GRID ---------- */
 .t-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -119,20 +145,54 @@ button {
 }
 
 .t-box {
-  background: #eee;
+  background: #1e1e1e;
   padding: 10px;
   border-radius: 4px;
+  border: 1px solid #2a2a2a;
 }
 
+.t-box strong {
+  display: block;
+  margin-bottom: 5px;
+  color: #ccc;
+}
+
+.t-box input {
+  width: 100%;
+  margin-top: 4px;
+  background: #121212;
+  color: #e0e0e0;
+  border: 1px solid #3a3a3a;
+  border-radius: 4px;
+  padding: 4px;
+}
+
+/* ---------- TARGET LIST ---------- */
 .target-row {
   display: flex;
   gap: 10px;
   margin-bottom: 8px;
+  align-items: center;
 }
 
+.target-row span {
+  flex: 1;
+}
+
+.target-row select {
+  background: #1e1e1e;
+  color: #e0e0e0;
+  border: 1px solid #3a3a3a;
+  border-radius: 4px;
+  padding: 4px;
+}
+
+/* ---------- RESULT ---------- */
 pre {
-  background: #111;
-  color: #0f0;
+  background: #0b0b0b;
+  color: #7CFC98;
   padding: 10px;
+  border-radius: 6px;
   user-select: all;
+  border: 1px solid #2a2a2a;
 }
