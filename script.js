@@ -135,38 +135,46 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateRallyList() {
     rallyList.innerHTML = "";
 
-    const rallies = [
-      ...containers.ally.querySelectorAll(".rally"),
-      ...containers.enemy.querySelectorAll(".rally")
-    ];
+    addSection("Allies");
+    containers.ally.querySelectorAll(".rally").forEach(addRow);
 
-    rallies.forEach(rally => {
-      const type = rally.dataset.type;
-      const name = rally.querySelector("input").value;
+    addSection("Enemies");
+    containers.enemy.querySelectorAll(".rally").forEach(addRow);
+  }
 
-      const row = document.createElement("div");
-      row.className = "target-row";
-      row.innerHTML = `
-        <span>${name}</span>
-        <select>
-          <option>No target</option>
-          <option>T1</option>
-          <option>T2</option>
-          <option>T3</option>
-          <option>T4</option>
-          <option>Castle</option>
-        </select>
-      `;
+  function addSection(title) {
+    const header = document.createElement("div");
+    header.className = "list-section";
+    header.textContent = title;
+    rallyList.appendChild(header);
+  }
 
-      if (type === "enemy") {
-        const btn = document.createElement("button");
-        btn.textContent = "▶ Ally timings";
-        btn.onclick = () => calculateAgainstEnemy(rally, row);
-        row.appendChild(btn);
-      }
+  function addRow(rally) {
+    const type = rally.dataset.type;
+    const name = rally.querySelector("input").value;
 
-      rallyList.appendChild(row);
-    });
+    const row = document.createElement("div");
+    row.className = "target-row";
+    row.innerHTML = `
+      <span>${name}</span>
+      <select>
+        <option>No target</option>
+        <option>T1</option>
+        <option>T2</option>
+        <option>T3</option>
+        <option>T4</option>
+        <option>Castle</option>
+      </select>
+    `;
+
+    if (type === "enemy") {
+      const btn = document.createElement("button");
+      btn.textContent = "▶ Ally timings";
+      btn.onclick = () => calculateAgainstEnemy(rally, row);
+      row.appendChild(btn);
+    }
+
+    rallyList.appendChild(row);
   }
 
   /* ---------- ENEMY VS ALLY CALC ---------- */
@@ -196,7 +204,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* ---------- CALCULATE (ORIGINAL) ---------- */
+  /* ---------- GLOBAL CALCULATE ---------- */
   document.getElementById("calculate").onclick = () => {
     resultBox.textContent = "";
     const rallies = [...document.querySelectorAll(".rally")];
