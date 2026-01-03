@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* ---------- SEARCH (active tab only) ---------- */
+  /* ---------- SEARCH ---------- */
   search.addEventListener("input", () => {
     const val = search.value.toLowerCase();
     if (!val) return;
@@ -135,29 +135,68 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateRallyList() {
     rallyList.innerHTML = "";
 
-    ["ally", "enemy"].forEach(type => {
-      containers[type].querySelectorAll(".rally").forEach(rally => {
-        const name = rally.querySelector("input").value;
+    const rallies = [
+      ...containers.ally.querySelectorAll(".rally"),
+      ...containers.enemy.querySelectorAll(".rally")
+    ];
 
-        const row = document.createElement("div");
-        row.className = "target-row";
-        row.innerHTML = `
-          <span>${name}</span>
-          <select>
-            <option>No target</option>
-            <option>T1</option>
-            <option>T2</option>
-            <option>T3</option>
-            <option>T4</option>
-            <option>Castle</option>
-          </select>
-        `;
-        rallyList.appendChild(row);
-      });
+    rallies.forEach(rally => {
+      const type = rally.dataset.type;
+      const name = rally.querySelector("input").value;
+
+      const row = document.createElement("div");
+      row.className = "target-row";
+      row.innerHTML = `
+        <span>${name}</span>
+        <select>
+          <option>No target</option>
+          <option>T1</option>
+          <option>T2</option>
+          <option>T3</option>
+          <option>T4</option>
+          <option>Castle</option>
+        </select>
+      `;
+
+      if (type === "enemy") {
+        const btn = document.createElement("button");
+        btn.textContent = "▶ Ally timings";
+        btn.onclick = () => calculateAgainstEnemy(rally, row);
+        row.appendChild(btn);
+      }
+
+      rallyList.appendChild(row);
     });
   }
 
-  /* ---------- CALCULATE ---------- */
+  /* ---------- ENEMY VS ALLY CALC ---------- */
+  function calculateAgainstEnemy(enemyRally, row) {
+    const target = row.querySelector("select").value;
+    if (target === "No target") return;
+
+    const enemyBox = enemyRally.querySelector(`.t-box[data-name="${target}"]`);
+    const enemyTime =
+      Number(enemyBox.querySelector(".min").value) * 60 +
+      Number(enemyBox.querySelector(".sec").value);
+
+    resultBox.textContent = "";
+    const now = new Date();
+
+    containers.ally.querySelectorAll(".rally").forEach(ally => {
+      const allyBox = ally.querySelector(`.t-box[data-name="${target}"]`);
+      const allyTime =
+        Number(allyBox.querySelector(".min").value) * 60 +
+        Number(allyBox.querySelector(".sec").value);
+
+      if (allyTime > enemyTime) return;
+
+      const t = new Date(now.getTime() + (enemyTime - allyTime) * 1000);
+      resultBox.textContent +=
+        `${ally.querySelector("input").value} → ${formatUTC(t)}\n`;
+    });
+  }
+
+  /* ---------- CALCULATE (ORIGINAL) ---------- */
   document.getElementById("calculate").onclick = () => {
     resultBox.textContent = "";
     const rallies = [...document.querySelectorAll(".rally")];
