@@ -159,10 +159,10 @@ document.addEventListener("DOMContentLoaded", () => {
       <span>${name}</span>
       <select>
         <option>No target</option>
-        <option>T1</option>
-        <option>T2</option>
-        <option>T3</option>
-        <option>T4</option>
+        <option>Turret1</option>
+        <option>Turret2</option>
+        <option>Turret3</option>
+        <option>Turret4</option>
         <option>Castle</option>
       </select>
     `;
