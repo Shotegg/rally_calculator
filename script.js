@@ -50,10 +50,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
       <div class="rally-content">
         <div class="t-grid">
-          ${createTBox("T1")}
-          ${createTBox("T2")}
-          ${createTBox("T3")}
-          ${createTBox("T4")}
+          ${createTBox("Turret1")}
+          ${createTBox("Turret2")}
+          ${createTBox("Turret3")}
+          ${createTBox("Turret4")}
           ${createTBox("Castle")}
         </div>
       </div>
