@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
     rally.className = "rally";
     rally.draggable = !("ontouchstart" in window);
     rally.dataset.type = type;
-
+  
     rally.innerHTML = `
       <div class="rally-header">
         <div class="header-left">
@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <button class="delete">✖</button>
         </div>
       </div>
-    
+  
       <div class="rally-content">
         <div class="t-grid">
           ${createTBox("Turret1")}
@@ -62,34 +62,33 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
       </div>
     `;
-
+  
     containers[type].prepend(rally);
-
-    rally.querySelector(".delete").onclick = () => {
+  
+    rally.querySelector(".delete").addEventListener("click", (e) => {
+      e.stopPropagation();
       rally.remove();
       updateRallyList();
-    };
-
+    });
+  
     const headerLeft = rally.querySelector(".header-left");
     const headerRight = rally.querySelector(".header-right");
     const nameInput = rally.querySelector(".rally-header input");
-    
-    /* ⬅️ ΑΡΙΣΤΕΡΑ: άνοιγμα + edit όνομα */
-    headerLeft.onclick = () => {
+  
+    headerLeft.addEventListener("click", (e) => {
       e.stopPropagation();
       openOnly(rally, type);
       nameInput.focus();
       nameInput.select();
-    };
-    
-    /* ➡️ ΔΕΞΙΑ: άνοιγμα ΜΟΝΟ */
-    headerRight.onclick = () => {
+    });
+  
+    headerRight.addEventListener("click", (e) => {
       e.stopPropagation();
       openOnly(rally, type);
-    };
-
-    rally.querySelector("input").addEventListener("input", updateRallyList);
-
+    });
+  
+    nameInput.addEventListener("input", updateRallyList);
+  
     enableDrag(rally, containers[type]);
   }
 
