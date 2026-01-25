@@ -76,6 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
     /* ⬅️ ΑΡΙΣΤΕΡΑ: άνοιγμα + edit όνομα */
     headerLeft.onclick = () => {
+      e.stopPropagation();
       openOnly(rally, type);
       nameInput.focus();
       nameInput.select();
@@ -83,6 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
     /* ➡️ ΔΕΞΙΑ: άνοιγμα ΜΟΝΟ */
     headerRight.onclick = () => {
+      e.stopPropagation();
       openOnly(rally, type);
     };
 
@@ -304,8 +306,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   
   loadFromStorage();
-
+  
+  document.addEventListener("input", saveToStorage);
+  document.addEventListener("click", saveToStorage);
 });
 
-document.addEventListener("input", saveToStorage);
-document.addEventListener("click", saveToStorage);
