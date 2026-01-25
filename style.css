@@ -186,3 +186,68 @@ pre {
   user-select: all;
   border: 1px solid #2a2a2a;
 }
+
+/* 📱 MOBILE FRIENDLY */
+@media (max-width: 768px) {
+
+  body {
+    padding: 10px;
+  }
+
+  .layout {
+    flex-direction: column;
+  }
+
+  .left, .right {
+    flex: none;
+    width: 100%;
+  }
+
+  .right {
+    margin-top: 15px;
+  }
+
+  /* κουμπιά σε γραμμή */
+  .top-controls {
+    flex-direction: column;
+  }
+
+  .top-controls button,
+  .top-controls input {
+    width: 100%;
+  }
+
+  /* tabs μεγαλύτερα */
+  .tab {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    font-size: 16px;
+  }
+
+  /* 5 columns → 2 columns */
+  .t-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* target list */
+  .target-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .target-row span {
+    font-size: 14px;
+  }
+
+  .target-row select,
+  .target-row button {
+    width: 100%;
+  }
+
+  /* πιο μεγάλα inputs */
+  input, select, button {
+    font-size: 16px;
+    padding: 8px;
+  }
+}
