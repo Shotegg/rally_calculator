@@ -90,15 +90,31 @@ button:hover {
 
 .rally-header {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  cursor: default;
+  background: rgba(255,255,255,0.05);
+}
+
+.header-left {
+  display: flex;
   gap: 10px;
   align-items: center;
-  padding: 10px;
-  cursor: grab;
-  background: rgba(255,255,255,0.05);
+  flex: 1;
+  cursor: text;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
 }
 
 .drag-handle {
   opacity: 0.6;
+  cursor: grab;
 }
 
 .rally-header input {
