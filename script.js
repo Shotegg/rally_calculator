@@ -38,16 +38,20 @@ document.addEventListener("DOMContentLoaded", () => {
   function createRallyCreator(type, number) {
     const rally = document.createElement("div");
     rally.className = "rally";
-    rally.draggable = true;
+    rally.draggable = !("ontouchstart" in window);
     rally.dataset.type = type;
 
     rally.innerHTML = `
       <div class="rally-header">
-        <span class="drag-handle">≡</span>
-        <input type="text" value="${type === "ally" ? "Ally" : "Enemy"} Rally ${number}">
-        <button class="delete">✖</button>
+        <div class="header-left">
+          <span class="drag-handle">≡</span>
+          <input type="text" value="${type === "ally" ? "Ally" : "Enemy"} Rally ${number}">
+        </div>
+        <div class="header-right">
+          <button class="delete">✖</button>
+        </div>
       </div>
-
+    
       <div class="rally-content">
         <div class="t-grid">
           ${createTBox("Turret1")}
@@ -66,8 +70,19 @@ document.addEventListener("DOMContentLoaded", () => {
       updateRallyList();
     };
 
-    rally.querySelector(".rally-header").onclick = e => {
-      if (e.target.tagName === "BUTTON") return;
+    const headerLeft = rally.querySelector(".header-left");
+    const headerRight = rally.querySelector(".header-right");
+    const nameInput = rally.querySelector(".rally-header input");
+    
+    /* ⬅️ ΑΡΙΣΤΕΡΑ: άνοιγμα + edit όνομα */
+    headerLeft.onclick = () => {
+      openOnly(rally, type);
+      nameInput.focus();
+      nameInput.select();
+    };
+    
+    /* ➡️ ΔΕΞΙΑ: άνοιγμα ΜΟΝΟ */
+    headerRight.onclick = () => {
       openOnly(rally, type);
     };
 
@@ -244,4 +259,53 @@ document.addEventListener("DOMContentLoaded", () => {
       .join(":");
   }
 
+  function saveToStorage() {
+    const data = [];
+  
+    document.querySelectorAll(".rally").forEach(rally => {
+      const obj = {
+        type: rally.dataset.type,
+        name: rally.querySelector(".rally-header input").value,
+        boxes: {}
+      };
+  
+      rally.querySelectorAll(".t-box").forEach(box => {
+        obj.boxes[box.dataset.name] = {
+          min: box.querySelector(".min").value,
+          sec: box.querySelector(".sec").value
+        };
+      });
+  
+      data.push(obj);
+    });
+  
+    localStorage.setItem("rallies", JSON.stringify(data));
+  }
+  
+  function loadFromStorage() {
+    const data = JSON.parse(localStorage.getItem("rallies") || "[]");
+  
+    data.forEach(r => {
+      counters[r.type]++;
+      createRallyCreator(r.type, counters[r.type]);
+  
+      const rally = containers[r.type].querySelector(".rally");
+  
+      rally.querySelector(".rally-header input").value = r.name;
+  
+      Object.entries(r.boxes).forEach(([key, val]) => {
+        const box = rally.querySelector(`.t-box[data-name="${key}"]`);
+        box.querySelector(".min").value = val.min;
+        box.querySelector(".sec").value = val.sec;
+      });
+    });
+  
+    updateRallyList();
+  }
+  
+  loadFromStorage();
+
 });
+
+document.addEventListener("input", saveToStorage);
+document.addEventListener("click", saveToStorage);
