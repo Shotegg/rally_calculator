@@ -314,8 +314,20 @@ pre {
     align-items: stretch;
   }
 
+  .target-name {
+    align-items: center;
+    flex-wrap: nowrap;
+  }
+
+  .visibility-toggle {
+    flex: 0 0 auto;
+  }
+
   .target-row span {
     font-size: 14px;
+    white-space: normal;
+    word-break: break-word;
+    flex: 1 1 auto;
   }
 
   .target-row select,
