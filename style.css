@@ -176,9 +176,8 @@ button:hover {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 12px;
-  color: #cfcfcf;
 }
+
 
 .t-grid {
   display: grid;
@@ -399,7 +398,7 @@ pre {
 
 @media (max-width: 480px) {
   .t-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 6px;
   }
 

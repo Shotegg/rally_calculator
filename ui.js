@@ -88,8 +88,7 @@ export function createTBox(name) {
         <input type="number" class="sec" min="0" value="0" placeholder="sec" aria-label="seconds">
       </div>
       <label class="counter-check-row">
-        <input type="checkbox" class="counter-check" checked>
-        Counter
+        <input type="checkbox" class="counter-check" checked aria-label="Counter target">
       </label>
     </div>
   `;
