@@ -344,7 +344,6 @@ pre {
     font-size: 16px;
   }
 
-  /* 5 columns → 2 columns */
   .t-grid {
     grid-template-columns: repeat(5, 1fr);
   }
@@ -395,6 +394,40 @@ pre {
   input, select, button {
     font-size: 16px;
     padding: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .t-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+
+  .t-box {
+    padding: 5px;
+  }
+
+  .t-box input {
+    width: 100%;
+  }
+
+  .buffer-row {
+    gap: 8px;
+  }
+
+  .visibility-toggle {
+    width: 24px;
+    height: 24px;
+    padding: 2px;
+  }
+
+  .visibility-toggle svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .target-row select {
+    font-size: 15px;
   }
 }
 
