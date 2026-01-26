@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<h1>Rally Helper</h1>
+<h1 data-i18n="appTitle">Rally Helper</h1>
 
 <div class="layout">
 
@@ -16,13 +16,22 @@
   <div class="left">
 
     <div class="top-controls">
-      <button id="addRally">➕ Add Rally Creator</button>
-      <input id="search" placeholder="Search Rally Creator...">
+      <button id="addRally" data-i18n="addRally">Add Rally Creator</button>
+      <input id="search" data-i18n-placeholder="searchPlaceholder" placeholder="Search Rally Creator...">
+      <label class="lang-select">
+        <span data-i18n="language">Language</span>
+        <select id="langSelect" aria-label="Language">
+          <option value="en" label="English">🇺🇸</option>
+          <option value="es" label="Español">🇪🇸</option>
+          <option value="ko" label="한국어">🇰🇷</option>
+          <option value="zh-Hant" label="繁體中文">🇹🇼</option>
+        </select>
+      </label>
     </div>
 
     <div class="tabs">
-      <button class="tab active" data-type="ally">Ally</button>
-      <button class="tab" data-type="enemy">Enemy</button>
+      <button class="tab active" data-type="ally" data-i18n="tabAlly">Ally</button>
+      <button class="tab" data-type="enemy" data-i18n="tabEnemy">Enemy</button>
     </div>
 
     <div id="allyContainer" class="rally-container ally"></div>
@@ -32,14 +41,14 @@
 
   <!-- RIGHT -->
   <div class="right">
-    <h3>Rally Creators & Targets</h3>
+    <h3 data-i18n="listTitle">Rally Creators & Targets</h3>
     <div id="rallyList"></div>
 
-    <button id="calculate">Calculate</button>
+    <button id="calculate" data-i18n="calculate">Calculate</button>
 
     <div class="result-header">
-      <h3>Result (UTC)</h3>
-      <button id="copyResult" type="button">Copy</button>
+      <h3 data-i18n="resultTitle">Result (UTC)</h3>
+      <button id="copyResult" type="button" data-i18n="copy">Copy</button>
     </div>
     <pre id="resultBox"></pre>
   </div>

@@ -26,6 +26,7 @@ body {
   display: flex;
   gap: 10px;
   margin-bottom: 10px;
+  align-items: center;
 }
 
 button {
@@ -48,6 +49,24 @@ button:hover {
   color: #e0e0e0;
   border: 1px solid #3a3a3a;
   border-radius: 4px;
+}
+
+.lang-select {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #cfcfcf;
+}
+
+.lang-select select {
+  background: #1e1e1e;
+  color: #e0e0e0;
+  border: 1px solid #3a3a3a;
+  border-radius: 4px;
+  padding: 6px;
+  min-width: 48px;
+  text-align: center;
 }
 
 .tabs {

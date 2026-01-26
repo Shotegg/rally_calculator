@@ -6,6 +6,7 @@ import {
   isRallyEnabled,
   isTargetCounterEnabled
 } from "./helpers.js";
+import { targetLabel } from "./i18n.js";
 
 export function calculateAgainstEnemy(app, enemyRally, row) {
   const target = row.querySelector("select").value;
@@ -41,7 +42,7 @@ export function calculateAgainstEnemy(app, enemyRally, row) {
   results
     .sort((a, b) => a.time.getTime() - b.time.getTime())
     .forEach(r => {
-      app.resultBox.textContent += `${r.name} -> ${formatUTC(r.time)} -> ${r.target}\n`;
+      app.resultBox.textContent += `${r.name} -> ${formatUTC(r.time)} -> ${targetLabel(r.target)}\n`;
     });
 }
 
@@ -100,6 +101,6 @@ export function calculateAll(app) {
   results
     .sort((a, b) => a.time.getTime() - b.time.getTime())
     .forEach(r => {
-      app.resultBox.textContent += `${r.name} -> ${formatUTC(r.time)} -> ${r.target}\n`;
+      app.resultBox.textContent += `${r.name} -> ${formatUTC(r.time)} -> ${targetLabel(r.target)}\n`;
     });
 }

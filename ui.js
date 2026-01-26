@@ -7,6 +7,7 @@ import {
   setRallyEnabled,
   setRallyTarget
 } from "./helpers.js";
+import { t, targetLabel } from "./i18n.js";
 
 export function createRallyCreator(app, type, number, hooks) {
   const rally = document.createElement("div");
@@ -16,11 +17,13 @@ export function createRallyCreator(app, type, number, hooks) {
   rally.dataset.enabled = "true";
   rally.dataset.target = NO_TARGET;
 
+  const defaultName = `${t(type === "ally" ? "tabAlly" : "tabEnemy")} ${t("rallyWord")} ${number}`;
+
   rally.innerHTML = `
     <div class="rally-header">
       <div class="header-left">
         <span class="drag-handle">::</span>
-        <input type="text" value="${type === "ally" ? "Ally" : "Enemy"} Rally ${number}">
+        <input type="text" value="${defaultName}">
       </div>
       <div class="header-right">
         <button class="delete">x</button>
@@ -30,12 +33,12 @@ export function createRallyCreator(app, type, number, hooks) {
     <div class="rally-content">
       <div class="buffer-row">
         <label class="buffer-label">
-          Buffer (sec)
+          <span data-i18n="bufferLabel">Buffer (sec)</span>
           <input type="number" class="buffer" min="0" value="0">
         </label>
         <label class="counter-toggle">
           <input type="checkbox" class="counter-master" checked>
-          Counter rally
+          <span data-i18n="counterRally">Counter rally</span>
         </label>
       </div>
       <div class="t-grid">
@@ -76,16 +79,17 @@ export function createRallyCreator(app, type, number, hooks) {
 }
 
 export function createTBox(name) {
+  const label = targetLabel(name);
   return `
     <div class="t-box" data-name="${name}">
-      <strong>${name}</strong>
+      <strong data-i18n="${getTargetKey(name)}">${label}</strong>
       <div class="time-field">
-        <span class="time-label">min</span>
-        <input type="number" class="min" min="0" value="0" placeholder="min" aria-label="minutes">
+        <span class="time-label" data-i18n="minLabel">min</span>
+        <input type="number" class="min" min="0" value="0" placeholder="min" data-i18n-placeholder="minLabel" aria-label="minutes">
       </div>
       <div class="time-field">
-        <span class="time-label">sec</span>
-        <input type="number" class="sec" min="0" value="0" placeholder="sec" aria-label="seconds">
+        <span class="time-label" data-i18n="secLabel">sec</span>
+        <input type="number" class="sec" min="0" value="0" placeholder="sec" data-i18n-placeholder="secLabel" aria-label="seconds">
       </div>
       <label class="counter-check-row">
         <input type="checkbox" class="counter-check" checked aria-label="Counter target">
@@ -126,10 +130,10 @@ export function enableDrag(app, rally, container, onUpdateList) {
 export function updateRallyList(app, calculateAgainstEnemy) {
   app.rallyList.innerHTML = "";
 
-  addSection(app, "Allies");
+  addSection(app, t("alliesSection"));
   app.containers.ally.querySelectorAll(".rally").forEach(r => addRow(app, r, calculateAgainstEnemy));
 
-  addSection(app, "Enemies");
+  addSection(app, t("enemiesSection"));
   app.containers.enemy.querySelectorAll(".rally").forEach(r => addRow(app, r, calculateAgainstEnemy));
 }
 
@@ -163,7 +167,7 @@ function addRow(app, rally, calculateAgainstEnemy) {
 
   if (rally.dataset.type === "enemy") {
     const btn = document.createElement("button");
-    btn.textContent = "Ally timings";
+    btn.textContent = t("allyTimings");
     btn.onclick = () => calculateAgainstEnemy(app, rally, row);
     row.appendChild(btn);
   }
@@ -175,12 +179,14 @@ function setTargetOptions(select) {
   select.innerHTML = "";
 
   const base = document.createElement("option");
-  base.textContent = NO_TARGET;
+  base.textContent = t("noTarget");
+  base.value = NO_TARGET;
   select.appendChild(base);
 
   TARGETS.forEach(name => {
     const opt = document.createElement("option");
-    opt.textContent = name;
+    opt.value = name;
+    opt.textContent = targetLabel(name);
     select.appendChild(opt);
   });
 }
@@ -225,6 +231,17 @@ function getVisibilityIcons() {
       <path d="M3 3l18 18" fill="none" stroke="currentColor" stroke-width="1.5"/>
     </svg>
   `;
+}
+
+function getTargetKey(name) {
+  const map = {
+    "Turret 1": "target.turret1",
+    "Turret 2": "target.turret2",
+    "Turret 3": "target.turret3",
+    "Turret 4": "target.turret4",
+    "Castle": "target.castle"
+  };
+  return map[name] || "";
 }
 
 function setupCounterControls(rally) {

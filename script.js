@@ -7,6 +7,7 @@ import {
 } from "./ui.js";
 import { calculateAgainstEnemy, calculateAll } from "./calc.js";
 import { loadFromStorage, saveToStorage } from "./storage.js";
+import { applyTranslations, getLanguage, initI18n, setLanguage, t } from "./i18n.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const state = {
@@ -25,6 +26,10 @@ document.addEventListener("DOMContentLoaded", () => {
     rallyList: document.getElementById("rallyList"),
     resultBox: document.getElementById("resultBox")
   };
+
+  initI18n();
+  initLanguageSelect(app);
+  applyTranslations();
 
   initTabs(app);
   initAddButton(app);
@@ -121,14 +126,14 @@ function initCopyButton(app) {
       } else {
         fallbackCopyText(text);
       }
-      btn.textContent = "Copied";
+      btn.textContent = applyCopyLabel(true);
     } catch {
       fallbackCopyText(text);
-      btn.textContent = "Copied";
+      btn.textContent = applyCopyLabel(true);
     }
 
     setTimeout(() => {
-      btn.textContent = "Copy";
+      btn.textContent = applyCopyLabel(false);
     }, 1200);
   });
 }
@@ -158,4 +163,21 @@ function fallbackCopyText(text) {
   } finally {
     area.remove();
   }
+}
+
+function initLanguageSelect(app) {
+  const select = document.getElementById("langSelect");
+  if (!select) return;
+
+  select.value = getLanguage();
+  select.addEventListener("change", () => {
+    setLanguage(select.value);
+    applyTranslations();
+    updateRallyList(app, calculateAgainstEnemy);
+  });
+}
+
+function applyCopyLabel(isCopied) {
+  const key = isCopied ? "copied" : "copy";
+  return t(key);
 }
