@@ -19,6 +19,7 @@ export function calculateAgainstEnemy(app, enemyRally, row) {
 
   app.resultBox.textContent = "";
   const now = new Date();
+  const results = [];
 
   app.containers.ally.querySelectorAll(".rally").forEach(ally => {
     if (!isRallyEnabled(ally)) return;
@@ -31,8 +32,18 @@ export function calculateAgainstEnemy(app, enemyRally, row) {
     if (allyTime > enemyTime) return;
 
     const t = new Date(now.getTime() + (enemyTime - allyTime) * 1000);
-    app.resultBox.textContent += `${getRallyName(ally)} -> ${formatUTC(t)}\n`;
+    results.push({
+      name: getRallyName(ally),
+      time: t,
+      target
+    });
   });
+
+  results
+    .sort((a, b) => a.time.getTime() - b.time.getTime())
+    .forEach(r => {
+      app.resultBox.textContent += `${r.name} -> ${formatUTC(r.time)} -> ${r.target}\n`;
+    });
 }
 
 export function calculateAll(app) {
@@ -49,26 +60,47 @@ export function calculateAll(app) {
     if (!isRallyEnabled(rally)) return;
 
     const box = rally.querySelector(`.t-box[data-name="${target}"]`);
-    const buffer = getRallyBuffer(rally);
-    const total =
+    const targetTime =
       Number(box.querySelector(".min").value) * 60 +
-      Number(box.querySelector(".sec").value) +
-      buffer;
+      Number(box.querySelector(".sec").value);
+    const buffer = getRallyBuffer(rally);
 
     if (!groups[target]) groups[target] = [];
     groups[target].push({
       name: getRallyName(rally),
-      total
+      targetTime,
+      buffer
     });
   });
 
   const now = new Date();
+  const results = [];
 
-  Object.values(groups).forEach(group => {
-    const max = Math.max(...group.map(g => g.total));
+  Object.entries(groups).forEach(([target, group]) => {
+    if (!group.length) return;
+
+    const first = group.reduce((best, g) => {
+      const bestValue = best.targetTime + best.buffer;
+      const nextValue = g.targetTime + g.buffer;
+      return nextValue > bestValue ? g : best;
+    }, group[0]);
+
+    const firstStart = new Date(now.getTime() + first.buffer * 1000);
+
     group.forEach(g => {
-      const t = new Date(now.getTime() + (max - g.total) * 1000);
-      app.resultBox.textContent += `${g.name} -> ${formatUTC(t)}\n`;
+      const offsetSeconds = first.targetTime - g.targetTime;
+      const t = new Date(firstStart.getTime() + offsetSeconds * 1000);
+      results.push({
+        name: g.name,
+        time: t,
+        target
+      });
     });
   });
+
+  results
+    .sort((a, b) => a.time.getTime() - b.time.getTime())
+    .forEach(r => {
+      app.resultBox.textContent += `${r.name} -> ${formatUTC(r.time)} -> ${r.target}\n`;
+    });
 }

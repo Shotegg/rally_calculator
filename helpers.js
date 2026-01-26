@@ -1,4 +1,4 @@
-export const TARGETS = ["Turret1", "Turret2", "Turret3", "Turret4", "Castle"];
+export const TARGETS = ["Turret 1", "Turret 2", "Turret 3", "Turret 4", "Castle"];
 export const NO_TARGET = "No target";
 
 export function formatUTC(d) {
