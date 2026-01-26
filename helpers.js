@@ -26,3 +26,15 @@ export function isRallyEnabled(rally) {
 export function setRallyEnabled(rally, enabled) {
   rally.dataset.enabled = enabled ? "true" : "false";
 }
+
+export function getRallyBuffer(rally) {
+  const input = rally.querySelector(".buffer");
+  const value = Number(input?.value ?? 0);
+  return Number.isFinite(value) ? value : 0;
+}
+
+export function setRallyBuffer(rally, value) {
+  const input = rally.querySelector(".buffer");
+  if (!input) return;
+  input.value = Number.isFinite(Number(value)) ? value : 0;
+}

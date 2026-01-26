@@ -3,7 +3,9 @@ import {
   getRallyName,
   getRallyTarget,
   isRallyEnabled,
+  getRallyBuffer,
   setRallyEnabled,
+  setRallyBuffer,
   setRallyTarget
 } from "./helpers.js";
 
@@ -16,6 +18,7 @@ export function saveToStorage(app) {
       name: getRallyName(rally),
       enabled: isRallyEnabled(rally),
       target: getRallyTarget(rally),
+      buffer: getRallyBuffer(rally),
       boxes: {}
     };
 
@@ -48,6 +51,7 @@ export function loadFromStorage(app, hooks) {
     rally.querySelector(".rally-header input").value = r.name;
     setRallyEnabled(rally, r.enabled !== false);
     setRallyTarget(rally, r.target || NO_TARGET);
+    setRallyBuffer(rally, r.buffer ?? 0);
 
     Object.entries(r.boxes || {}).forEach(([key, val]) => {
       const box = rally.querySelector(`.t-box[data-name="${key}"]`);

@@ -143,6 +143,22 @@ button:hover {
   display: block;
 }
 
+.buffer-row {
+  margin-bottom: 10px;
+}
+
+.buffer-row label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #cfcfcf;
+}
+
+.buffer-row input {
+  width: 80px;
+}
+
 .t-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -307,9 +323,21 @@ pre {
     width: 100%;
   }
 
+  .visibility-toggle {
+    padding: 2px;
+    width: 26px;
+    height: 26px;
+  }
+
+  .visibility-toggle svg {
+    width: 14px;
+    height: 14px;
+  }
+
   /* πιο μεγάλα inputs */
   input, select, button {
     font-size: 16px;
     padding: 8px;
   }
 }
+

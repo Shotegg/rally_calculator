@@ -28,6 +28,12 @@ export function createRallyCreator(app, type, number, hooks) {
     </div>
 
     <div class="rally-content">
+      <div class="buffer-row">
+        <label>
+          Buffer (sec)
+          <input type="number" class="buffer" min="0" value="0">
+        </label>
+      </div>
       <div class="t-grid">
         ${TARGETS.map(createTBox).join("")}
       </div>

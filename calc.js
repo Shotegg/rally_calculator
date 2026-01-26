@@ -1,4 +1,10 @@
-import { NO_TARGET, formatUTC, getRallyName, isRallyEnabled } from "./helpers.js";
+import {
+  NO_TARGET,
+  formatUTC,
+  getRallyBuffer,
+  getRallyName,
+  isRallyEnabled
+} from "./helpers.js";
 
 export function calculateAgainstEnemy(app, enemyRally, row) {
   if (!isRallyEnabled(enemyRally)) return;
@@ -36,14 +42,18 @@ export function calculateAll(app) {
   const groups = {};
 
   rallies.forEach((rally, i) => {
+    if (rally.dataset.type === "enemy") return;
+
     const target = rows[i]?.querySelector("select")?.value ?? NO_TARGET;
     if (target === NO_TARGET) return;
     if (!isRallyEnabled(rally)) return;
 
     const box = rally.querySelector(`.t-box[data-name="${target}"]`);
+    const buffer = getRallyBuffer(rally);
     const total =
       Number(box.querySelector(".min").value) * 60 +
-      Number(box.querySelector(".sec").value);
+      Number(box.querySelector(".sec").value) +
+      buffer;
 
     if (!groups[target]) groups[target] = [];
     groups[target].push({
