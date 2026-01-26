@@ -146,24 +146,24 @@ button:hover {
 .t-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 10px;
+  gap: px;
 }
 
 .t-box {
   background: #1e1e1e;
-  padding: 10px;
+  padding: 6px;
   border-radius: 4px;
   border: 1px solid #2a2a2a;
 }
 
 .t-box input {
-  width: 100%;
+  width: 80%;
   margin-top: 4px;
   background: #121212;
   color: #e0e0e0;
   border: 1px solid #3a3a3a;
   border-radius: 4px;
-  padding: 4px;
+  padding: 2px;
 }
 
 /* 🔹 NEW: Section divider */
@@ -184,8 +184,23 @@ button:hover {
   align-items: center;
 }
 
+.target-row.is-disabled span {
+  opacity: 0.6;
+}
+
+.target-name {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
 .target-row span {
   flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .target-row select {
@@ -194,6 +209,35 @@ button:hover {
   border: 1px solid #3a3a3a;
   border-radius: 4px;
   padding: 4px;
+}
+
+.visibility-toggle {
+  background: #1e1e1e;
+  border: 1px solid #3a3a3a;
+  color: #e0e0e0;
+  padding: 4px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.visibility-toggle svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.visibility-toggle .icon-off {
+  display: none;
+}
+
+.visibility-toggle.is-off .icon-on {
+  display: none;
+}
+
+.visibility-toggle.is-off .icon-off {
+  display: block;
 }
 
 pre {
@@ -245,7 +289,7 @@ pre {
 
   /* 5 columns → 2 columns */
   .t-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(5, 1fr);
   }
 
   /* target list */
