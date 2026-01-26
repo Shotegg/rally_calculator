@@ -319,8 +319,12 @@ pre {
   }
 
   .target-row select,
-  .target-row button {
+  .target-row button:not(.visibility-toggle) {
     width: 100%;
+  }
+
+  .visibility-toggle {
+    width: auto;
   }
 
   .visibility-toggle {
