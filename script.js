@@ -30,6 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initAddButton(app);
   initSearch(app);
   initCalculate(app);
+  initCopyButton(app);
 
   loadFromStorage(app, {
     createRallyCreator,
@@ -104,4 +105,31 @@ function initCalculate(app) {
   document.getElementById("calculate").onclick = () => {
     calculateAll(app);
   };
+}
+
+function initCopyButton(app) {
+  const btn = document.getElementById("copyResult");
+  if (!btn) return;
+
+  btn.addEventListener("click", async () => {
+    const text = app.resultBox.textContent.trim();
+    if (!text) return;
+
+    try {
+      await navigator.clipboard.writeText(text);
+      btn.textContent = "Copied";
+    } catch {
+      const area = document.createElement("textarea");
+      area.value = text;
+      document.body.appendChild(area);
+      area.select();
+      document.execCommand("copy");
+      area.remove();
+      btn.textContent = "Copied";
+    }
+
+    setTimeout(() => {
+      btn.textContent = "Copy";
+    }, 1200);
+  });
 }
