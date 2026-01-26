@@ -38,3 +38,16 @@ export function setRallyBuffer(rally, value) {
   if (!input) return;
   input.value = Number.isFinite(Number(value)) ? value : 0;
 }
+
+export function isTargetCounterEnabled(rally, target) {
+  const box = rally.querySelector(`.t-box[data-name="${target}"]`);
+  const input = box?.querySelector(".counter-check");
+  return Boolean(input?.checked);
+}
+
+export function setTargetCounterEnabled(rally, target, enabled) {
+  const box = rally.querySelector(`.t-box[data-name="${target}"]`);
+  const input = box?.querySelector(".counter-check");
+  if (!input) return;
+  input.checked = Boolean(enabled);
+}

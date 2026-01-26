@@ -4,9 +4,11 @@ import {
   getRallyTarget,
   isRallyEnabled,
   getRallyBuffer,
+  isTargetCounterEnabled,
   setRallyEnabled,
   setRallyBuffer,
-  setRallyTarget
+  setRallyTarget,
+  setTargetCounterEnabled
 } from "./helpers.js";
 
 export function saveToStorage(app) {
@@ -19,6 +21,7 @@ export function saveToStorage(app) {
       enabled: isRallyEnabled(rally),
       target: getRallyTarget(rally),
       buffer: getRallyBuffer(rally),
+      counterTargets: getCounterTargets(rally),
       boxes: {}
     };
 
@@ -52,6 +55,7 @@ export function loadFromStorage(app, hooks) {
     setRallyEnabled(rally, r.enabled !== false);
     setRallyTarget(rally, r.target || NO_TARGET);
     setRallyBuffer(rally, r.buffer ?? 0);
+    applyCounterTargets(rally, r.counterTargets || {});
 
     Object.entries(r.boxes || {}).forEach(([key, val]) => {
       const box = rally.querySelector(`.t-box[data-name="${key}"]`);
@@ -62,4 +66,25 @@ export function loadFromStorage(app, hooks) {
   });
 
   hooks.updateRallyList(app, hooks.calculateAgainstEnemy);
+}
+
+function getCounterTargets(rally) {
+  const map = {};
+  rally.querySelectorAll(".t-box").forEach(box => {
+    const target = box.dataset.name;
+    map[target] = isTargetCounterEnabled(rally, target);
+  });
+  return map;
+}
+
+function applyCounterTargets(rally, map) {
+  Object.entries(map).forEach(([target, enabled]) => {
+    setTargetCounterEnabled(rally, target, enabled);
+  });
+
+  const master = rally.querySelector(".counter-master");
+  const checks = [...rally.querySelectorAll(".counter-check")];
+  if (master && checks.length) {
+    master.checked = checks.every(input => input.checked);
+  }
 }

@@ -29,9 +29,13 @@ export function createRallyCreator(app, type, number, hooks) {
 
     <div class="rally-content">
       <div class="buffer-row">
-        <label>
+        <label class="buffer-label">
           Buffer (sec)
           <input type="number" class="buffer" min="0" value="0">
+        </label>
+        <label class="counter-toggle">
+          <input type="checkbox" class="counter-master" checked>
+          Counter rally
         </label>
       </div>
       <div class="t-grid">
@@ -67,14 +71,26 @@ export function createRallyCreator(app, type, number, hooks) {
   nameInput.addEventListener("input", hooks.onUpdateList);
 
   hooks.enableDrag(app, rally, app.containers[type], hooks.onUpdateList);
+
+  setupCounterControls(rally);
 }
 
 export function createTBox(name) {
   return `
     <div class="t-box" data-name="${name}">
       <strong>${name}</strong>
-      <input type="number" class="min" min="0" value="0">
-      <input type="number" class="sec" min="0" value="0">
+      <div class="time-field">
+        <span class="time-label">min</span>
+        <input type="number" class="min" min="0" value="0" placeholder="min" aria-label="minutes">
+      </div>
+      <div class="time-field">
+        <span class="time-label">sec</span>
+        <input type="number" class="sec" min="0" value="0" placeholder="sec" aria-label="seconds">
+      </div>
+      <label class="counter-check-row">
+        <input type="checkbox" class="counter-check" checked>
+        Counter
+      </label>
     </div>
   `;
 }
@@ -210,4 +226,17 @@ function getVisibilityIcons() {
       <path d="M3 3l18 18" fill="none" stroke="currentColor" stroke-width="1.5"/>
     </svg>
   `;
+}
+
+function setupCounterControls(rally) {
+  const master = rally.querySelector(".counter-master");
+  const checks = [...rally.querySelectorAll(".counter-check")];
+  if (!master) return;
+
+  master.addEventListener("change", () => {
+    const value = master.checked;
+    checks.forEach(input => {
+      input.checked = value;
+    });
+  });
 }

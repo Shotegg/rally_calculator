@@ -3,12 +3,11 @@ import {
   formatUTC,
   getRallyBuffer,
   getRallyName,
-  isRallyEnabled
+  isRallyEnabled,
+  isTargetCounterEnabled
 } from "./helpers.js";
 
 export function calculateAgainstEnemy(app, enemyRally, row) {
-  if (!isRallyEnabled(enemyRally)) return;
-
   const target = row.querySelector("select").value;
   if (target === NO_TARGET) return;
 
@@ -22,7 +21,7 @@ export function calculateAgainstEnemy(app, enemyRally, row) {
   const results = [];
 
   app.containers.ally.querySelectorAll(".rally").forEach(ally => {
-    if (!isRallyEnabled(ally)) return;
+    if (!isTargetCounterEnabled(ally, target)) return;
 
     const allyBox = ally.querySelector(`.t-box[data-name="${target}"]`);
     const allyTime =
