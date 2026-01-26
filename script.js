@@ -116,15 +116,14 @@ function initCopyButton(app) {
     if (!text) return;
 
     try {
-      await navigator.clipboard.writeText(text);
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        fallbackCopyText(text);
+      }
       btn.textContent = "Copied";
     } catch {
-      const area = document.createElement("textarea");
-      area.value = text;
-      document.body.appendChild(area);
-      area.select();
-      document.execCommand("copy");
-      area.remove();
+      fallbackCopyText(text);
       btn.textContent = "Copied";
     }
 
@@ -132,4 +131,31 @@ function initCopyButton(app) {
       btn.textContent = "Copy";
     }, 1200);
   });
+}
+
+function fallbackCopyText(text) {
+  const area = document.createElement("textarea");
+  area.value = text;
+  area.setAttribute("readonly", "");
+  area.style.position = "fixed";
+  area.style.top = "-1000px";
+  area.style.left = "-1000px";
+  document.body.appendChild(area);
+  area.focus();
+  area.select();
+  area.setSelectionRange(0, text.length);
+  try {
+    document.execCommand("copy");
+  } catch {
+    const selection = window.getSelection();
+    const range = document.createRange();
+    const resultBox = document.getElementById("resultBox");
+    if (resultBox) {
+      range.selectNodeContents(resultBox);
+      selection.removeAllRanges();
+      selection.addRange(range);
+    }
+  } finally {
+    area.remove();
+  }
 }
