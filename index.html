@@ -29,10 +29,17 @@
       </label>
     </div>
 
-    <div class="tabs">
-      <button class="tab active" data-type="ally" data-i18n="tabAlly">Ally</button>
-      <button class="tab" data-type="enemy" data-i18n="tabEnemy">Enemy</button>
+    <div class="tabs-row">
+      <div class="tabs">
+        <button class="tab active" data-type="ally" data-i18n="tabAlly">Ally</button>
+        <button class="tab" data-type="enemy" data-i18n="tabEnemy">Enemy</button>
+      </div>
+      <div class="tab-actions">
+        <button id="importData" type="button" data-i18n="import">Import</button>
+        <button id="exportData" type="button" data-i18n="export">Export</button>
+      </div>
     </div>
+    <input type="file" id="importFile" class="import-file" accept="application/json">
 
     <div id="allyContainer" class="rally-container ally"></div>
     <div id="enemyContainer" class="rally-container enemy hidden"></div>

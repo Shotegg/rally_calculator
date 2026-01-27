@@ -6,7 +6,7 @@ import {
   updateRallyList
 } from "./ui.js";
 import { calculateAgainstEnemy, calculateAll } from "./calc.js";
-import { loadFromStorage, saveToStorage } from "./storage.js";
+import { loadFromStorage, saveToStorage, importFromJson, exportToJson } from "./storage.js";
 import { applyTranslations, getLanguage, initI18n, setLanguage, t } from "./i18n.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -36,6 +36,8 @@ document.addEventListener("DOMContentLoaded", () => {
   initSearch(app);
   initCalculate(app);
   initCopyButton(app);
+  initImport(app);
+  initExport(app);
 
   loadFromStorage(app, {
     createRallyCreator,
@@ -135,6 +137,53 @@ function initCopyButton(app) {
     setTimeout(() => {
       btn.textContent = applyCopyLabel(false);
     }, 1200);
+  });
+}
+
+function initImport(app) {
+  const fileInput = document.getElementById("importFile");
+  const btn = document.getElementById("importData");
+  if (!fileInput || !btn) return;
+
+  btn.addEventListener("click", () => {
+    fileInput.click();
+  });
+
+  fileInput.addEventListener("change", async () => {
+    const file = fileInput.files?.[0];
+    if (!file) return;
+
+    try {
+      const text = await file.text();
+      importFromJson(app, text, {
+        createRallyCreator,
+        updateRallyList,
+        calculateAgainstEnemy,
+        openOnly,
+        enableDrag
+      });
+      fileInput.value = "";
+    } catch {
+      // ignore malformed files
+    }
+  });
+}
+
+function initExport(app) {
+  const btn = document.getElementById("exportData");
+  if (!btn) return;
+
+  btn.addEventListener("click", () => {
+    const payload = exportToJson();
+    const blob = new Blob([payload], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "rallies.json";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
   });
 }
 

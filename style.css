@@ -72,7 +72,24 @@ button:hover {
 .tabs {
   display: flex;
   gap: 10px;
+}
+
+.tabs-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
   margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.tab-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.import-file {
+  display: none;
 }
 
 .tab {
@@ -324,6 +341,7 @@ pre {
   margin-bottom: 6px;
 }
 
+
 /* 📱 MOBILE FRIENDLY */
 @media (max-width: 768px) {
 
@@ -412,6 +430,15 @@ pre {
   input, select, button {
     font-size: 16px;
     padding: 8px;
+  }
+
+  .tabs-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .tab-actions button {
+    width: 100%;
   }
 }
 
